@@ -3,7 +3,7 @@
 # Installer dans le venv de qa/ :  python -m pip install -r requirements-dev.txt
 ruff==0.17.4
 pre-commit==4.7.0
-bandit==1.9.4
+bandit[sarif]==1.9.4
 pip-audit==2.10.1
 zizmor==1.32.0
 commitizen==4.20.0
