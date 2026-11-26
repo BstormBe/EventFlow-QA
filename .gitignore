@@ -11,3 +11,7 @@ frontend/.env
 .pytest_cache/
 qa/.venv/
 qa/reports/
+
+# Rapports generes pour SonarQube
+ruff-report.json
+bandit-report.json
