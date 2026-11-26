@@ -1,6 +1,9 @@
 # EventFlow-QA
 
-Projet de tests automatises de l'application EventFlow (formation Testeur QA 2026).
+Projet de tests automatises de l'application EventFlow (formation Testeur QA).
+
+**Premier reflexe sous Windows** (PowerShell 7, depuis la racine du depot) : `.\scripts\check-poste.ps1`
+verifie Python, Docker, gh, gitleaks, le venv, les ports et le remote de votre fork.
 
 ## Structure
 
@@ -27,21 +30,33 @@ Depuis la racine du depot :
 
 ```bash
 docker compose up -d --build
-# avec les bugs du fil rouge :
-SEED_BUGS=true docker compose up -d --build
 ```
 
-Remise a zero des donnees : `docker compose down -v`.
+La base PostgreSQL est exposee sur **localhost:5433** (pas 5432) pour ne pas entrer en conflit
+avec un PostgreSQL installe sur le poste.
+
+Sous Windows (PowerShell), depuis la racine du depot :
+
+```powershell
+.\scripts\bugs-on.ps1     # redemarre le backend AVEC les bugs du fil rouge
+.\scripts\bugs-off.ps1    # ... SANS les bugs
+.\scripts\reset-db.ps1    # remise a zero des donnees (docker compose down -v puis up)
+```
+
+Equivalent bash : `SEED_BUGS=true docker compose up -d backend` ; remise a zero : `docker compose down -v`.
 
 ## Installer les tests
 
 ```bash
 cd qa
 python -m venv .venv
-source .venv/bin/activate        # Windows : .venv\Scripts\activate
-pip install -r requirements.txt
-playwright install chromium      # navigateur pour les tests UI
+source .venv/bin/activate        # Windows (PowerShell) : .\.venv\Scripts\Activate.ps1
+python -m pip install -r requirements.txt -r requirements-dev.txt
+python -m playwright install chromium   # navigateur pour les tests UI
 ```
+
+`requirements-dev.txt` contient les outils qualite et securite du cours (Ruff, pre-commit, Bandit,
+pip-audit, zizmor, commitizen), en versions epinglees. Python 3.12 recommande.
 
 ## Lancer les tests
 
@@ -81,4 +96,11 @@ Avec `SEED_BUGS=true`, plusieurs tests passent au rouge : c'est attendu, ils det
 
 Le workflow `.github/workflows/ci.yml` demarre l'application avec docker compose et lance toutes les suites
 a chaque push. Le rapport Allure et les traces sont dans l'artefact `rapports-qa`.
-Pour lancer le pipeline avec les bugs : onglet Actions > CI > Run workflow > seed_bugs = true.
+Pour lancer le pipeline avec les bugs : onglet Actions > CI > Run workflow > seed_bugs = true,
+ou `gh workflow run ci.yml --ref main -f seed_bugs=true`.
+
+Sur un fork, les workflows sont **desactives** tant que vous ne les activez pas (onglet Actions).
+
+Le workflow `.github/workflows/sonar.yml` analyse le code avec SonarQube Cloud. Il ne fait rien tant que
+le secret `SONAR_TOKEN` n'existe pas dans votre depot et que `sonar-project.properties` (racine)
+n'a pas recu votre organisation et votre cle de projet.

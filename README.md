@@ -10,7 +10,7 @@
 
 eventflow est une application web réaliste à trois tiers (React, FastAPI, PostgreSQL) qui permet à des organisateurs de mettre en vente des billets pour leurs événements, et au public de réserver et payer en ligne. Elle sert de fil rouge à la formation Testeur QA : les stagiaires l'explorent, la testent et l'industrialisent tout au long du programme, du test manuel jusqu'à la chaîne CI/CD.
 
-La version actuelle implémente le comportement attendu. Les bugs intentionnels du fil rouge (B1 à B12) seront ajoutés ensuite, activables via une variable d'environnement, afin de servir les exercices de chaque module.
+La version actuelle implémente le comportement attendu. Les bugs intentionnels du fil rouge (B1 à B12) sont activables via la variable d'environnement `SEED_BUGS` ; voir `docs/FIL_ROUGE_BUGS.md`. Le projet de tests se trouve dans `qa/`.
 
 ## Sommaire
 
@@ -95,7 +95,7 @@ Services disponibles :
 | Frontend    | http://localhost:5173            |
 | API         | http://localhost:8000            |
 | Documentation Swagger | http://localhost:8000/docs |
-| PostgreSQL  | localhost:5432 (`eventflow` / `eventflow`) |
+| PostgreSQL  | localhost:5433 (`eventflow` / `eventflow`) |
 
 Au premier lancement, le backend crée les tables et injecte les données de démonstration. Le code (`backend/app` et `frontend/src`) est monté en volume : les modifications sont rechargées à chaud (uvicorn `--reload` et HMR Vite). Une reconstruction n'est nécessaire que lorsque les dépendances changent :
 
@@ -313,4 +313,6 @@ Connexion impossible avec une erreur 500 mentionnant un email invalide : les adr
 
 Réservation affichée comme « expirée » dès la page de paiement : signe d'une date interprétée dans le mauvais fuseau. L'API renvoie des dates en UTC explicite (suffixe `Z`) et le frontend les parse comme UTC. Conservez ce contrat si vous ajoutez des dates.
 
-Colonnes de profil (`phone`, `avatar`) absentes sur une base ancienne : le backend les ajoute automatiquement au démarrage via une migration idempotente (`ALTER TABLE ... ADD COLUMN`). Un redémarrage du 
+Colonnes de profil (`phone`, `avatar`) absentes sur une base ancienne : le backend les ajoute automatiquement au démarrage via une migration idempotente (`ALTER TABLE ... ADD COLUMN`). Un redémarrage du backend suffit (`docker compose restart backend`).
+
+`UnicodeDecodeError` de psycopg2 au lancement des tests `db` sous Windows : c'est en réalité un échec de connexion à un **autre** PostgreSQL (installé sur le poste), dont le message en français n'est pas en UTF-8. La base d'EventFlow est exposée sur **localhost:5433** pour éviter ce conflit ; vérifiez `DB_URL` dans `qa/.env`. Le script `scripts/check-poste.ps1` détecte ce cas.
