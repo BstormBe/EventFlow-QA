@@ -271,7 +271,7 @@ Bugs déjà disponibles : B1 (sur-réservation), B2 (plafond de billets contourn
 
 ## Projet de tests EventFlow-QA
 
-La branche `eventflow-qa` contient le projet de tests construit pendant les modules 9 à 11 (PyTest, Playwright, Selenium, Locust, GitHub Actions, Allure). Il se trouve dans le dossier `qa/`, le pipeline dans `.github/workflows/ci.yml`. Voir `qa/README.md`.
+La branche `main` contient aussi le projet de tests construit pendant les modules 9 à 11 (PyTest, Playwright, Selenium, Locust, GitHub Actions, Allure). Il se trouve dans le dossier `qa/`, le pipeline dans `.github/workflows/ci.yml`. Voir `qa/README.md`.
 
 ## Structure du dépôt
 
