@@ -6,7 +6,7 @@ services:
       POSTGRES_PASSWORD: eventflow
       POSTGRES_DB: eventflow
     ports:
-      - "5432:5432"
+      - "5433:5432"   # 5433 cote poste : evite le conflit avec un PostgreSQL local
     volumes:
       - eventflow_pgdata:/var/lib/postgresql/data
     healthcheck:

@@ -7,7 +7,7 @@ load_dotenv(os.path.join(os.path.dirname(__file__), "..", ".env"))
 
 API_URL = os.getenv("API_URL", "http://localhost:8000")
 BASE_URL = os.getenv("BASE_URL", "http://localhost:5173")
-DB_URL = os.getenv("DB_URL", "postgresql+psycopg2://eventflow:eventflow@localhost:5432/eventflow")
+DB_URL = os.getenv("DB_URL", "postgresql+psycopg2://eventflow:eventflow@localhost:5433/eventflow")
 
 ADMIN_EMAIL = os.getenv("ADMIN_EMAIL", "admin@eventflow.test")
 ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD", "admin1234")
